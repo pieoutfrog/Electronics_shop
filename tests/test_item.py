@@ -42,3 +42,12 @@ def test_get_name():
     item1 = Item("Клавиатура",75,5)
     item1.name = "Клавиатура"
     assert item1.name == "Клавиатура"
+
+
+
+def test__str__(item1):
+    assert str(item1) == "Смартфон"
+
+
+def test__repr__(item1):
+    assert repr(item1) == "Item('Смартфон', 10000, 20)"
