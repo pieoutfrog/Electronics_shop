@@ -19,14 +19,14 @@ class Item:
         self.price = price
         self.quantity = quantity
         self.all.append(self)
-        pass
+
 
     @property
-    def get_name(self):
+    def name(self):
         return self.__name
 
-    @get_name.setter
-    def get_name(self, value):
+    @name.setter
+    def name(self, value):
         if len(value) >= 10:
             print("Длина наименования товара превышает 10 символов.")
         else:
@@ -69,9 +69,15 @@ class Item:
         return int_number
 
     def __repr__(self):
-        return f"Item('{self.__name}', {self.price}, {self.quantity})"
-
-
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
 
     def __str__(self):
         return f"{self.__name}"
+
+    def __add__(self, other):
+        if not isinstance(other, Item):
+            raise ValueError('Складывать можно только объекты Item и дочерние от них.')
+        elif not isinstance(self, Item):
+            raise ValueError('Складывать можно только объекты Item и дочерние от них.')
+        else:
+            return self.quantity + other.quantity
