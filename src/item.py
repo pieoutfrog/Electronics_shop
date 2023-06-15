@@ -1,4 +1,5 @@
 import csv
+from src.InstantiateCSVError import InstantiateCSVError
 
 
 class Item:
@@ -20,13 +21,12 @@ class Item:
         self.quantity = quantity
         self.all.append(self)
 
-
     @property
-    def name(self):
+    def get_name(self):
         return self.__name
 
-    @name.setter
-    def name(self, value):
+    @get_name.setter
+    def get_name(self, value):
         if len(value) >= 10:
             print("Длина наименования товара превышает 10 символов.")
         else:
@@ -50,14 +50,21 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls):
         cls.all = []
-        with open("/home/alisa/PycharmProjects/bastards/src/items.csv", 'r', encoding='Windows-1251', newline='') as f:
-            reader = csv.reader(f)
-            next(reader)
-            for row in reader:
-                name = row[0]
-                price = row[1]
-                quantity = row[2]
-                cls(name, float(price), int(quantity))
+        try:
+            with open("/home/alisa/PycharmProjects/bastards/src/items.csv", 'r', encoding='Windows-1251',
+                      newline='') as f:
+                reader = csv.reader(f)
+                next(reader)
+                for row in reader:
+                    if list(row.keys()) == ['name', 'price', 'quantity']:
+                        name = row[0]
+                        price = row[1]
+                        quantity = row[2]
+                        cls(name, float(price), int(quantity))
+                    else:
+                        raise InstantiateCSVError
+        except FileNotFoundError:
+            raise FileNotFoundError('Отсутствует файл item.csv')
 
     @staticmethod
     def string_to_number(number: str):
